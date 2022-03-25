@@ -38,7 +38,7 @@ public class StringCalculatorTest {
             String сhar01 = block[1];
             String сhar03 = block[3].replaceAll(" ", ""); // Убираем пробелы если имеются с числом что бы не упало в ошибку при умножении
             number = Integer.parseInt(сhar03); // Преобразовываем строку в число
-            if(number<=10) {
+            if(number<=10) { // проверяем число не более 10
                 resultat = calc(сhar01, number, stringChar); // выполняем расчет в другом методе для строки и числа
                 System.out.println(resultat);
             }else System.out.println("Разрешается использовать только числа от 1 до 10.");
