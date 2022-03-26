@@ -11,37 +11,41 @@ public class StringCalculatorTest {
         System.out.println("Можно вводить выражения только следующего вида \"a\" + \"b\", \"a\" - \"b\", \"a\" * y, \"a\" / y " +
                 "где a и b - строки, а y - число  от 1 до 10 включительно.");
         String str = scanner.nextLine(); // получаем строку от пользователя
-        char[] uchar = new char[26]; // создаем массив символов
-        for (int i = 0; i < str.length(); i++) { // Перебераем пока длинна введенного текста не превышена
-            uchar[i] = str.charAt(i);           // получаем символ в веденной строке по порядку и помещаем в наш массив
-            if (uchar[i] == '+') {              // сравниваем символ
-                stringChar = uchar[i];          // заносим в переменную найденый символ
+        if (str.length() > 10)
+            System.out.println("Длина строки более 10 символов.");
+        else {
+            char[] uchar = new char[26]; // создаем массив символов
+            for (int i = 0; i < str.length(); i++) { // Перебераем пока длинна введенного текста не превышена
+                uchar[i] = str.charAt(i);           // получаем символ в веденной строке по порядку и помещаем в наш массив
+                if (uchar[i] == '+') {              // сравниваем символ
+                    stringChar = uchar[i];          // заносим в переменную найденый символ
+                }
+                if (uchar[i] == '-') {
+                    stringChar = uchar[i];
+                }
+                if (uchar[i] == '*') {
+                    stringChar = uchar[i];
+                }
+                if (uchar[i] == '/') {
+                    stringChar = uchar[i];
+                }
             }
-            if (uchar[i] == '-') {
-                stringChar = uchar[i];
-            }
-            if (uchar[i] == '*') {
-                stringChar = uchar[i];
-            }
-            if (uchar[i] == '/') {
-                stringChar = uchar[i];
-            }
-        }
-        String[] block = str.split("[+-/*\"]"); // убираем оператор и кавычки (убирает все дефисы не работает "Bye-bye!" - "World!")
+            String[] block = str.split("[+-/*\"]"); // убираем оператор и кавычки (убирает все дефисы не работает "Bye-bye!" - "World!")
 
-        if (block.length == 5) { // определяем что это строки или строка и число
-            String сhar01 = block[1];
-            String сhar04 = block[4];
-            resultat = calc(сhar01, сhar04, stringChar); // выполняем расчет в другом методе для строк
-            System.out.println(resultat);
-        } else {
-            String сhar01 = block[1];
-            String сhar03 = block[3].replaceAll(" ", ""); // Убираем пробелы если имеются с числом что бы не упало в ошибку при умножении
-            number = Integer.parseInt(сhar03); // Преобразовываем строку в число
-            if(number<=10) { // проверяем число не более 10
-                resultat = calc(сhar01, number, stringChar); // выполняем расчет в другом методе для строки и числа
+            if (block.length == 5) { // определяем что это строки или строка и число
+                String сhar01 = block[1];
+                String сhar04 = block[4];
+                resultat = calc(сhar01, сhar04, stringChar); // выполняем расчет в другом методе для строк
                 System.out.println(resultat);
-            }else System.out.println("Разрешается использовать только числа от 1 до 10.");
+            } else {
+                String сhar01 = block[1];
+                String сhar03 = block[3].replaceAll(" ", ""); // Убираем пробелы если имеются с числом что бы не упало в ошибку при умножении
+                number = Integer.parseInt(сhar03); // Преобразовываем строку в число
+                if (number <= 10) { // проверяем число не более 10
+                    resultat = calc(сhar01, number, stringChar); // выполняем расчет в другом методе для строки и числа
+                    System.out.println(resultat);
+                } else System.out.println("Разрешается использовать только числа от 1 до 10.");
+            }
         }
 
 
@@ -60,7 +64,7 @@ public class StringCalculatorTest {
                 if (poz == 0) {
                     resultat = num1.substring(ind); // если в первой строке нет вхождения второй возвращаем всю строку
                 } else {
-                    resultat = num1.substring(0,poz)+num1.substring(poz+ind,poz2); // убираем только вхождение второй строки
+                    resultat = num1.substring(0, poz) + num1.substring(poz + ind, poz2); // убираем только вхождение второй строки
                 }
                 break;
             case '*':
@@ -88,9 +92,8 @@ public class StringCalculatorTest {
                 for (int x = 0; x < num2; x++) { // При умножении строки на число выводит ответ ("a" * 5 = aaaaa)?
                     if (resultat == null) { // проверка для первого значения
                         resultat = num1;
-                    }
-                    else
-                    resultat = resultat + num1;
+                    } else
+                        resultat = resultat + num1;
                 }
                 break;
             case '/':
@@ -109,8 +112,8 @@ public class StringCalculatorTest {
             default:
                 throw new IllegalArgumentException("Не верный знак операции");
         }
-        if (resultat.length() > 40){ // если длинна строки более 40 выводим (...) согласно задаче
-            return resultat.substring(0, 40)+" (...)";
+        if (resultat.length() > 40) { // если длинна строки более 40 выводим (...) согласно задаче
+            return resultat.substring(0, 40) + " (...)";
         }
         return resultat;
     }
