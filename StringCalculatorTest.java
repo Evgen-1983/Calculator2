@@ -6,37 +6,51 @@ public class StringCalculatorTest {
     static char stringChar;
 
     public static void main(String[] args) {
-        int number;
+        int number, numberDufis = 0;
+        String[] block;
+
         Scanner scanner = new Scanner(System.in); // подключаем сканер
         System.out.println("Можно вводить выражения только следующего вида \"a\" + \"b\", \"a\" - \"b\", \"a\" * y, \"a\" / y " +
                 "где a и b - строки, а y - число  от 1 до 10 включительно.");
         String str = scanner.nextLine(); // получаем строку от пользователя
-        if (str.length() > 10)
-            System.out.println("Длина строки более 10 символов.");
-        else {
-            char[] uchar = new char[26]; // создаем массив символов
-            for (int i = 0; i < str.length(); i++) { // Перебераем пока длинна введенного текста не превышена
-                uchar[i] = str.charAt(i);           // получаем символ в веденной строке по порядку и помещаем в наш массив
-                if (uchar[i] == '+') {              // сравниваем символ
-                    stringChar = uchar[i];          // заносим в переменную найденый символ
-                }
-                if (uchar[i] == '-') {
-                    stringChar = uchar[i];
-                }
-                if (uchar[i] == '*') {
-                    stringChar = uchar[i];
-                }
-                if (uchar[i] == '/') {
-                    stringChar = uchar[i];
-                }
-            }
-            String[] block = str.split("[+-/*\"]"); // убираем оператор и кавычки (убирает все дефисы не работает "Bye-bye!" - "World!")
+        String strBuf;
 
+        char[] uchar = new char[26]; // создаем массив символов
+        for (int i = 0; i < str.length(); i++) { // Перебераем пока длинна введенного текста не превышена
+            uchar[i] = str.charAt(i);           // получаем символ в веденной строке по порядку и помещаем в наш массив
+            if (uchar[i] == '+') {              // сравниваем символ
+                stringChar = uchar[i];          // заносим в переменную найденый символ
+            }
+            if (uchar[i] == '-') {
+                stringChar = uchar[i];
+                numberDufis++;  // считаем количество минусов/дефисов
+            }
+            if (uchar[i] == '*') {
+                stringChar = uchar[i];
+            }
+            if (uchar[i] == '/') {
+                stringChar = uchar[i];
+            }
+        }
+        if (numberDufis == 0 || numberDufis == 1)
+            block = str.split("[+-/*\"]"); // убираем оператор и кавычки (убирает все дефисы не работает "Bye-bye!" - "World!")
+        else {
+            int indexDufis = str.indexOf("-"); // находим первое вхождение
+            indexDufis = str.indexOf("-", indexDufis + 1); // находим второе вхождение
+            strBuf = str.substring(0, indexDufis) + "\"" + str.substring(indexDufis + 2); // Добавляем любой из символов которые будут удаляться на следующем шаге например "
+            block = strBuf.split("[+/*\"]");
+
+        }
+        if (block[1].length() > 10)
+            System.out.println("Длина первой строки более 10 символов.");
+        else {
             if (block.length == 5) { // определяем что это строки или строка и число
-                String сhar01 = block[1];
-                String сhar04 = block[4];
-                resultat = calc(сhar01, сhar04, stringChar); // выполняем расчет в другом методе для строк
-                System.out.println(resultat);
+                if (block[4].length() < 10) {
+                    String сhar01 = block[1];
+                    String сhar04 = block[4];
+                    resultat = calc(сhar01, сhar04, stringChar); // выполняем расчет в другом методе для строк
+                    System.out.println(resultat);
+                } else System.out.println("Длина второй строки более 10 символов.");
             } else {
                 String сhar01 = block[1];
                 String сhar03 = block[3].replaceAll(" ", ""); // Убираем пробелы если имеются с числом что бы не упало в ошибку при умножении
@@ -61,8 +75,8 @@ public class StringCalculatorTest {
                 int poz = num1.indexOf(num2);  // находим вхождение в строку
                 int poz2 = num1.length();      // позиция 2
                 int ind = num2.length();       // получаем длинну вычитаемой строки
-                if (poz == 0) {
-                    resultat = num1.substring(ind); // если в первой строке нет вхождения второй возвращаем всю строку
+                if (poz == -1) {
+                    resultat = num1; // если в первой строке нет вхождения второй, возвращаем всю строку
                 } else {
                     resultat = num1.substring(0, poz) + num1.substring(poz + ind, poz2); // убираем только вхождение второй строки
                 }
